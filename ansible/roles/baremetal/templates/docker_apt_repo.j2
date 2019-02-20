@@ -2,5 +2,5 @@
 deb {{ docker_apt_url }} ./
 {% else %}
 # main docker repo
-deb {{ docker_apt_url }}/repo {{ ansible_distribution | lower }}-{{ ansible_distribution_release | lower }} main
+deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
 {% endif %}

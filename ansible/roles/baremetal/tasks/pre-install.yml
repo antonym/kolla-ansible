@@ -1,4 +1,13 @@
 ---
+
+- name: remove
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/apt/apt.conf
+    - /etc/apt/sources.list.d/docker.list
+
 # NOTE: raw install is required to support cloud images which do not have python installed
 - name: "Install python2 and python-simplejson"
   become: True
