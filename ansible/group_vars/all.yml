@@ -1209,6 +1209,14 @@ nova_safety_upgrade: "no"
 # Valid options are [ none, novnc, spice ]
 nova_console: "novnc"
 
+# VNC Security options
+# Enable VNC authentication using vencrypt
+nova_vnc_auth_schemes: "none"
+# When set to "vencrypt", enables certificate-based authentication
+# Requires nova_vnc_enable_tls to be set to true
+# Valid options are [ none, vencrypt ]
+nova_vnc_enable_tls: "no"
+
 #######################
 # Nova Database
 #######################

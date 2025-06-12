@@ -1,0 +1,50 @@
+---
+- name: Create VNC certificate directory
+  file:
+    path: "{{ vnc_dir }}"
+    state: directory
+
+- name: Create VNC certificate signed by internal CA
+  command: >
+    openssl x509 -req -in {{ internal_dir }}/server.csr
+    -CA {{ internal_dir }}/ca.crt -CAkey {{ internal_dir }}/ca.key
+    -out {{ vnc_dir }}/servercert.pem -days 365 -sha256
+    -CAcreateserial
+  args:
+    creates: "{{ vnc_dir }}/servercert.pem"
+
+- name: Create VNC client certificate signed by internal CA
+  command: >
+    openssl x509 -req -in {{ internal_dir }}/client.csr
+    -CA {{ internal_dir }}/ca.crt -CAkey {{ internal_dir }}/ca.key
+    -out {{ vnc_dir }}/clientcert.pem -days 365 -sha256
+    -CAcreateserial
+  args:
+    creates: "{{ vnc_dir }}/clientcert.pem"
+
+- name: Copy VNC client key
+  copy:
+    src: "{{ internal_dir }}/client.key"
+    dest: "{{ vnc_dir }}/clientkey.pem"
+    mode: '0600'
+
+- name: Copy VNC server key
+  copy:
+    src: "{{ internal_dir }}/server.key"
+    dest: "{{ vnc_dir }}/serverkey.pem"
+    mode: '0600'
+
+- name: Copy CA certificate for VNC
+  copy:
+    src: "{{ internal_dir }}/ca.crt"
+    dest: "{{ vnc_dir }}/cacert.pem"
+    mode: '0644'
+
+- name: Copy generated VNC certificates to output directory
+  copy:
+    src: "{{ vnc_dir }}/"
+    dest: "{{ certificates_vnc_output_dir }}/"
+    mode: preserve
+    directory_mode: '0755'
+  delegate_to: localhost
+  become: false

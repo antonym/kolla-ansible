@@ -108,6 +108,11 @@
     - libvirt_tls | bool
     - libvirt_tls_manage_certs | bool
 
+- name: Copying over VNC TLS certificates
+  include_tasks: config-vnc-tls.yml
+  when:
+    - nova_vnc_enable_tls | bool
+
 - name: Copying over libvirt SASL configuration
   become: true
   vars:

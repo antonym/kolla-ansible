@@ -1,0 +1,29 @@
+---
+- name: Copying over VNC TLS certificates to nova services
+  become: true
+  vars:
+    services:
+      - "nova-compute"
+      - "nova-novncproxy"
+    cert_files:
+      - cacert.pem
+      - clientcert.pem
+      - clientkey.pem
+      - servercert.pem
+      - serverkey.pem
+    service_name: "{{ item[0] }}"
+    filename: "{{ item[1] }}"
+    paths:
+      - "{{ node_custom_config }}/nova/nova-vnc/{{ inventory_hostname }}/{{ filename }}"
+      - "{{ node_custom_config }}/nova/nova-vnc/{{ filename }}"
+    service: "{{ nova_cell_services[service_name] }}"
+  copy:
+    src: "{{ lookup('first_found', paths) }}"
+    dest: "{{ node_config_directory }}/{{ service_name }}/{{ filename }}"
+    mode: "0600"
+  when:
+    - service | service_enabled_and_mapped_to_host
+    - nova_vnc_enable_tls | bool
+  loop: "{{ services | product(cert_files) | list }}"
+  notify:
+    - "Restart {{ service_name }} container"

@@ -626,6 +626,14 @@ workaround_ansible_issue_8743: yes
 # Valid options are [ none, novnc, spice ]
 #nova_console: "novnc"
 
+# VNC Security options
+# Enable VNC authentication using vencrypt
+# Valid options are [ none, vencrypt ]
+#nova_vnc_auth_schemes: "none"
+# When set to "yes", enables TLS encryption for VNC connections
+# Required for vencrypt authentication
+#nova_vnc_enable_tls: "no"
+
 ##############################
 # Neutron - networking options
 ##############################

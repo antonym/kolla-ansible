@@ -1,0 +1,27 @@
+---
+features:
+  - |
+    Add support for secure VNC console connections using vencrypt authentication.
+    This addresses security concerns where VNC connections were previously
+    unencrypted and unauthenticated. The new feature introduces:
+    
+    * ``nova_vnc_auth_schemes`` option to configure VNC authentication methods
+    * ``nova_vnc_enable_tls`` option to enable TLS encryption for VNC
+    * Automatic certificate generation and distribution for VNC TLS
+    * Integration with kolla-ansible's existing certificate management
+    
+    When ``nova_vnc_auth_schemes`` is set to "vencrypt" and 
+    ``nova_vnc_enable_tls`` is enabled, VNC connections will use 
+    certificate-based authentication between novncproxy and QEMU,
+    preventing direct unauthorized access to VM consoles.
+    
+    See bug `2043709 <https://bugs.launchpad.net/kolla-ansible/+bug/2043709>`__
+    for more details.
+security:
+  - |
+    VNC console connections can now be secured using certificate-based 
+    authentication with the vencrypt scheme. This prevents unauthorized
+    direct access to VM consoles by requiring proper certificate validation
+    between the novncproxy service and QEMU instances. To enable this
+    security feature, set ``nova_vnc_auth_schemes: "vencrypt"`` and 
+    ``nova_vnc_enable_tls: "yes"`` in globals.yml.

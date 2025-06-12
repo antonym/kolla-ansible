@@ -4,8 +4,14 @@ external_dir: "{{ kolla_certificates_dir }}/private/external"
 internal_dir: "{{ kolla_certificates_dir }}/private/internal"
 backend_dir: "{{ kolla_certificates_dir }}/private/backend"
 libvirt_dir: "{{ kolla_certificates_dir }}/private/libvirt"
+vnc_dir: "{{ kolla_certificates_dir }}/private/vnc"
 
 # Whether to generate certificates for libvirt TLS.
 certificates_generate_libvirt: "{{ libvirt_tls | default(false) | bool }}"
 # Directory into which to copy generated certificates and keys for libvirt TLS.
 certificates_libvirt_output_dir: "{{ node_custom_config }}/nova/nova-libvirt"
+
+# Whether to generate certificates for VNC TLS.
+certificates_generate_vnc: "{{ nova_vnc_enable_tls | default(false) | bool }}"
+# Directory into which to copy generated certificates and keys for VNC TLS.
+certificates_vnc_output_dir: "{{ node_custom_config }}/nova/nova-vnc"

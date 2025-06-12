@@ -56,6 +56,14 @@ server_proxyclient_address = {{ api_interface_address }}
 {% if inventory_hostname in groups[nova_cell_compute_group] %}
 novncproxy_base_url = {{ nova_novncproxy_fqdn | kolla_url(public_protocol,  nova_novncproxy_public_port, '/vnc_lite.html') }}
 {% endif %}
+{% if nova_vnc_auth_schemes != 'none' %}
+auth_schemes = {{ nova_vnc_auth_schemes }}
+{% if nova_vnc_auth_schemes == 'vencrypt' and nova_vnc_enable_tls | bool %}
+vencrypt_client_key = /etc/nova/clientkey.pem
+vencrypt_client_cert = /etc/nova/clientcert.pem
+vencrypt_ca_certs = /etc/nova/cacert.pem
+{% endif %}
+{% endif %}
 {% endif %}
 {% elif nova_console == 'spice' %}
 [vnc]
